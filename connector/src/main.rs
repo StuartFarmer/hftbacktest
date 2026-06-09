@@ -22,14 +22,16 @@ use iceoryx2::{
 };
 use tokio::{
     runtime::Builder,
-    select,
-    signal,
+    select, signal,
     sync::{
         Notify,
         mpsc::{UnboundedReceiver, UnboundedSender, unbounded_channel},
     },
 };
 use tracing::error;
+
+#[cfg(feature = "pacifica")]
+use crate::pacifica::Pacifica;
 
 use crate::{
     binancefutures::BinanceFutures,
@@ -44,6 +46,8 @@ pub mod binancefutures;
 pub mod binancespot;
 #[cfg(feature = "bybit")]
 pub mod bybit;
+#[cfg(feature = "pacifica")]
+pub mod pacifica;
 
 mod connector;
 //mod fuse;
@@ -81,6 +85,10 @@ fn run_receive_task(
                             Status::Canceled => {
                                 // Requests to the Connector cancel the order.
                                 connector.cancel(asset, order, tx.clone());
+                            }
+                            Status::Replaced => {
+                                // Requests to the Connector modify an existing order.
+                                connector.modify(asset, order, tx.clone());
                             }
                             status => {
                                 error!(?status, "An invalid request was received from the bot.");
@@ -340,6 +348,43 @@ async fn main() {
         exit(1);
     }));
 
+    let raw_args: Vec<String> = std::env::args().collect();
+    if raw_args.get(1).map(String::as_str) == Some("pacifica-sanity") {
+        tracing_subscriber::fmt::init();
+        #[cfg(feature = "pacifica")]
+        {
+            let mut sanity_args = vec![raw_args[0].clone()];
+            sanity_args.extend(raw_args[2..].iter().cloned());
+            let args = crate::pacifica::sanity::SanityArgs::parse_from(sanity_args);
+            match crate::pacifica::sanity::run(args).await {
+                Ok(summary) => {
+                    println!(
+                        "{}",
+                        serde_json::json!({
+                            "creates_ok": summary.creates_ok,
+                            "edits_ok": summary.edits_ok,
+                            "cancels_ok": summary.cancels_ok,
+                            "edited_client_order_id": summary.edited_client_order_id,
+                            "edited_exchange_order_id": summary.edited_exchange_order_id,
+                            "residual_client_order_ids": summary.residual_client_order_ids,
+                            "success": true
+                        })
+                    );
+                    return;
+                }
+                Err(error) => {
+                    error!(?error, "Pacifica sanity failed.");
+                    exit(1);
+                }
+            }
+        }
+        #[cfg(not(feature = "pacifica"))]
+        {
+            error!("The Pacifica connector was not enabled at build time.");
+            exit(1);
+        }
+    }
+
     let args = Args::parse();
 
     tracing_subscriber::fmt::init();
@@ -407,6 +452,23 @@ async fn main() {
                 .unwrap();
             connector.run(pub_tx.clone());
             Box::new(connector)
+        }
+        "pacifica" => {
+            #[cfg(feature = "pacifica")]
+            {
+                let mut connector = Pacifica::build_from(&config)
+                    .map_err(|error| {
+                        error!(?error, "Couldn't build the Pacifica connector.");
+                    })
+                    .unwrap();
+                connector.run(pub_tx.clone());
+                Box::new(connector)
+            }
+            #[cfg(not(feature = "pacifica"))]
+            {
+                error!("The Pacifica connector was not enabled at build time.");
+                exit(1);
+            }
         }
         connector => {
             error!(%connector, "This connector doesn't exist.");

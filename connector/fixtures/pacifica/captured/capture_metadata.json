@@ -1,0 +1,9 @@
+{
+  "account": "<ACCOUNT>",
+  "agg_level": 1,
+  "captured_at_ms": 1780919435551,
+  "execute_order_probe": true,
+  "rest_url": "https://test-api.pacifica.fi",
+  "symbol": "BTC",
+  "ws_url": "wss://test-ws.pacifica.fi/ws"
+}

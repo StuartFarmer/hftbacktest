@@ -1,0 +1,11 @@
+{
+  "messages": [
+    {
+      "channel": "subscribe",
+      "data": {
+        "account": "<ACCOUNT>",
+        "source": "account_trades"
+      }
+    }
+  ]
+}

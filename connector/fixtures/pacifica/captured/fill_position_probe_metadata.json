@@ -1,0 +1,13 @@
+{
+  "account": "<ACCOUNT>",
+  "amount": "0.0002",
+  "captured_at_ms": 1780919670290,
+  "close_side": "ask",
+  "estimated_mid_price": "63433.5",
+  "estimated_notional": "12.686700",
+  "execute_fill_position_probe": true,
+  "rest_url": "https://test-api.pacifica.fi",
+  "side": "bid",
+  "symbol": "BTC",
+  "ws_url": "wss://test-ws.pacifica.fi/ws"
+}

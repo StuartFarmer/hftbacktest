@@ -1,0 +1,26 @@
+{
+  "messages": [
+    {
+      "channel": "account_positions",
+      "data": [
+        {
+          "a": "0.0002",
+          "d": "bid",
+          "f": "0",
+          "i": false,
+          "l": null,
+          "m": "0",
+          "p": "63441",
+          "s": "BTC",
+          "t": 1780919672151
+        }
+      ],
+      "li": 336542010
+    },
+    {
+      "channel": "account_positions",
+      "data": [],
+      "li": 336542133
+    }
+  ]
+}

@@ -17,22 +17,10 @@ use crate::{
     depth::{INVALID_MAX, INVALID_MIN, L2MarketDepth, MarketDepth},
     prelude::OrdType,
     types::{
-        EXCH_ASK_DEPTH_CLEAR_EVENT,
-        EXCH_ASK_DEPTH_EVENT,
-        EXCH_ASK_DEPTH_SNAPSHOT_EVENT,
-        EXCH_BID_DEPTH_CLEAR_EVENT,
-        EXCH_BID_DEPTH_EVENT,
-        EXCH_BID_DEPTH_SNAPSHOT_EVENT,
-        EXCH_BUY_TRADE_EVENT,
-        EXCH_DEPTH_CLEAR_EVENT,
-        EXCH_EVENT,
-        EXCH_SELL_TRADE_EVENT,
-        Event,
-        Order,
-        OrderId,
-        Side,
-        Status,
-        TimeInForce,
+        EXCH_ASK_DEPTH_CLEAR_EVENT, EXCH_ASK_DEPTH_EVENT, EXCH_ASK_DEPTH_SNAPSHOT_EVENT,
+        EXCH_BID_DEPTH_CLEAR_EVENT, EXCH_BID_DEPTH_EVENT, EXCH_BID_DEPTH_SNAPSHOT_EVENT,
+        EXCH_BUY_TRADE_EVENT, EXCH_DEPTH_CLEAR_EVENT, EXCH_EVENT, EXCH_SELL_TRADE_EVENT, Event,
+        Order, OrderId, Side, Status, TimeInForce,
     },
 };
 
@@ -152,7 +140,7 @@ where
                     // q_ahead is negative since is_filled is true and its value represents the
                     // executable quantity of this order after execution in the queue ahead of this
                     // order.
-                    let exec_qty = if filled_qty > order.leaves_qty {
+                    let exec_qty = if filled_qty >= order.leaves_qty {
                         self.filled_orders.push(order.order_id);
                         order.leaves_qty
                     } else {
@@ -192,7 +180,7 @@ where
                     // q_ahead is negative since is_filled is true and its value represents the
                     // executable quantity of this order after execution in the queue ahead of this
                     // order.
-                    let exec_qty = if filled_qty > order.leaves_qty {
+                    let exec_qty = if filled_qty >= order.leaves_qty {
                         self.filled_orders.push(order.order_id);
                         order.leaves_qty
                     } else {

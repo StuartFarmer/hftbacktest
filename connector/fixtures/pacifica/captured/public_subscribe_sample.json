@@ -1,0 +1,11 @@
+{
+  "messages": [
+    {
+      "channel": "subscribe",
+      "data": {
+        "source": "bbo",
+        "symbol": "BTC"
+      }
+    }
+  ]
+}

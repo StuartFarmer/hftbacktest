@@ -1,0 +1,39 @@
+{
+  "action_type": "create_order",
+  "body": "Verification failed",
+  "endpoint": "/api/v1/orders/create_market",
+  "headers": {
+    "Connection": "close",
+    "Content-Length": "19",
+    "Date": "Mon, 08 Jun 2026 11:52:36 GMT",
+    "Vary": "Origin, Access-Control-Request-Method, Access-Control-Request-Headers",
+    "Via": "1.1 19870c0393f1333e354741940caea7ba.cloudfront.net (CloudFront)",
+    "X-Amz-Cf-Id": "yMjEE_rfTT7lktzgYR5y_S4lDRYqUSUhbzmF7UunSJ7Rhh72tXvFWw==",
+    "X-Amz-Cf-Pop": "MAD53-P8",
+    "X-Cache": "Error from cloudfront",
+    "ratelimit": "\"credits\";r=970;t=23",
+    "ratelimit-policy": "\"credits\";q=1000;w=60",
+    "vary": "Origin, Access-Control-Request-Method, Access-Control-Request-Headers"
+  },
+  "payload": {
+    "amount": "0.0002",
+    "client_order_id": "78e4640c-1b10-48c6-a974-e666fe430731",
+    "reduce_only": false,
+    "side": "bid",
+    "slippage_percent": "0.05",
+    "symbol": "BTC"
+  },
+  "signed_action": {
+    "account": "<ACCOUNT>",
+    "amount": "0.0002",
+    "client_order_id": "78e4640c-1b10-48c6-a974-e666fe430731",
+    "expiry_window": 5000,
+    "reduce_only": false,
+    "side": "bid",
+    "signature": "<REDACTED>",
+    "slippage_percent": "0.05",
+    "symbol": "BTC",
+    "timestamp": 1780919555872
+  },
+  "status": 400
+}

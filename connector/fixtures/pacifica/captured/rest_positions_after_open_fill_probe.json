@@ -1,0 +1,26 @@
+{
+  "path": "/api/v1/positions",
+  "payload": {
+    "code": null,
+    "data": [
+      {
+        "amount": "0.0002",
+        "created_at": 1780919672151,
+        "entry_price": "63441",
+        "funding": "0",
+        "isolated": false,
+        "liquidation_price": null,
+        "margin": "0",
+        "side": "bid",
+        "symbol": "BTC",
+        "updated_at": 1780919672151
+      }
+    ],
+    "error": null,
+    "last_order_id": 336542124,
+    "success": true
+  },
+  "query": {
+    "account": "<ACCOUNT>"
+  }
+}

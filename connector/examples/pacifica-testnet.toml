@@ -1,0 +1,16 @@
+# Pacifica testnet connector example. This file is installed into
+# hftbacktest/connector/examples/pacifica-testnet.toml.
+
+public_url = "wss://test-ws.pacifica.fi/ws"
+private_url = "wss://test-ws.pacifica.fi/ws"
+trade_url = "wss://test-ws.pacifica.fi/ws"
+rest_url = "https://test-api.pacifica.fi"
+
+account = ""
+private_key_file = "secrets/key.json"
+api_key = ""
+api_key_file = "secrets/pacifica_api.key"
+
+order_prefix = "pfhbt-"
+startup_policy = "fail_on_unknown_orders"
+testnet = true

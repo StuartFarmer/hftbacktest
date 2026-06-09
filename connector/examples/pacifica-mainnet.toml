@@ -1,0 +1,15 @@
+# Pacifica mainnet connector example.
+
+public_url = "wss://ws.pacifica.fi/ws"
+private_url = "wss://ws.pacifica.fi/ws"
+trade_url = "wss://ws.pacifica.fi/ws"
+rest_url = "https://api.pacifica.fi"
+
+account = ""
+private_key_file = "secrets/mm1.json"
+api_key = ""
+api_key_file = "secrets/mm_pacifica_api.key"
+
+order_prefix = "pfhbt-"
+startup_policy = "fail_on_unknown_orders"
+testnet = false

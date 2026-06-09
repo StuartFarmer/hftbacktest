@@ -1,0 +1,80 @@
+{
+  "create_order_request": {
+    "id": "660065de-8f32-46ad-ba1e-83c93d3e3966",
+    "params": {
+      "create_order": {
+        "account": "AwX6321...",
+        "signature": "5vnYpt...",
+        "timestamp": 1749223025396,
+        "expiry_window": 5000,
+        "symbol": "BTC",
+        "price": "100000.00",
+        "reduce_only": false,
+        "amount": "0.001",
+        "side": "bid",
+        "tif": "GTC",
+        "client_order_id": "79f948fd-7556-4066-a128-083f3ea49322",
+        "builder_code": "MYCODE"
+      }
+    }
+  },
+  "cancel_order_request": {
+    "id": "1bb2b72f-f545-4938-8a38-c5cda8823675",
+    "params": {
+      "cancel_order": {
+        "account": "AwX6321...",
+        "signature": "4RqbgB...",
+        "timestamp": 1749223343149,
+        "expiry_window": 5000,
+        "symbol": "BTC",
+        "client_order_id": "79f948fd-7556-4066-a128-083f3ea49322"
+      }
+    }
+  },
+  "edit_order_request": {
+    "id": "660065de-8f32-46ad-ba1e-83c93d3e3966",
+    "params": {
+      "edit_order": {
+        "account": "AwX6321...",
+        "signature": "5vnYpt...",
+        "timestamp": 1749223025396,
+        "expiry_window": 5000,
+        "symbol": "BTC",
+        "price": "99500",
+        "amount": "0.002",
+        "client_order_id": "79f948fd-7556-4066-a128-083f3ea49322"
+      }
+    }
+  },
+  "create_market_order_request": {
+    "id": "660065de-8f32-46ad-ba1e-83c93d3e3966",
+    "params": {
+      "create_market_order": {
+        "account": "AwX6321...",
+        "signature": "5vnYpt...",
+        "timestamp": 1749223025396,
+        "expiry_window": 5000,
+        "symbol": "BTC",
+        "reduce_only": false,
+        "amount": "0.001",
+        "side": "bid",
+        "slippage_percent": "0.5",
+        "client_order_id": "79f948fd-7556-4066-a128-083f3ea49322",
+        "builder_code": "MYCODE"
+      }
+    }
+  },
+  "cancel_all_orders_request": {
+    "id": "4e9b4edb-b123-4759-9250-d19db61fabcb",
+    "params": {
+      "cancel_all_orders": {
+        "account": "AwX6f3...",
+        "signature": "2XP8fz...",
+        "timestamp": 1749221927343,
+        "expiry_window": 5000,
+        "all_symbols": true,
+        "exclude_reduce_only": false
+      }
+    }
+  }
+}

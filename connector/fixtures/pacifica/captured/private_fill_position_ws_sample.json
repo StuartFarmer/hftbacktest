@@ -1,0 +1,251 @@
+{
+  "close_response": {
+    "code": null,
+    "data": {
+      "order_id": 336542133
+    },
+    "error": null,
+    "success": true
+  },
+  "confirmations": [
+    {
+      "channel": "subscribe",
+      "data": {
+        "account": "<ACCOUNT>",
+        "source": "account_positions"
+      }
+    },
+    {
+      "channel": "account_positions",
+      "data": [],
+      "li": 336541999
+    },
+    {
+      "channel": "subscribe",
+      "data": {
+        "account": "<ACCOUNT>",
+        "source": "account_order_updates"
+      }
+    }
+  ],
+  "messages": [
+    {
+      "channel": "subscribe",
+      "data": {
+        "account": "<ACCOUNT>",
+        "source": "account_trades"
+      }
+    },
+    {
+      "channel": "account_trades",
+      "data": [
+        {
+          "I": "26350e10-72a4-4de1-b1f8-5bc671dd561b",
+          "a": "0.0002",
+          "f": "0.005075",
+          "h": 68790424,
+          "i": 336542009,
+          "it": 0,
+          "li": 336542009,
+          "n": "-0.005075",
+          "o": "63441",
+          "p": "63441",
+          "s": "BTC",
+          "t": 1780919672102,
+          "tc": "normal",
+          "te": "fulfill_taker",
+          "ts": "open_long",
+          "u": "<ACCOUNT>"
+        }
+      ]
+    },
+    {
+      "channel": "account_order_updates",
+      "data": [
+        {
+          "I": "26350e10-72a4-4de1-b1f8-5bc671dd561b",
+          "a": "0.0002",
+          "ct": 1780919672102,
+          "d": "bid",
+          "f": "0",
+          "i": 336542009,
+          "ip": "63473",
+          "li": 336542009,
+          "lp": "0",
+          "oe": "make",
+          "os": "open",
+          "ot": "market",
+          "p": "0",
+          "r": false,
+          "s": "BTC",
+          "si": null,
+          "sp": null,
+          "tp": null,
+          "u": "<ACCOUNT>",
+          "ut": 1780919672102
+        },
+        {
+          "I": "26350e10-72a4-4de1-b1f8-5bc671dd561b",
+          "a": "0.0002",
+          "ct": 1780919672102,
+          "d": "bid",
+          "f": "0.0002",
+          "i": 336542009,
+          "ip": "63473",
+          "li": 336542009,
+          "lp": "63441",
+          "oe": "fulfill_market",
+          "os": "filled",
+          "ot": "market",
+          "p": "63441",
+          "r": false,
+          "s": "BTC",
+          "si": null,
+          "sp": null,
+          "tp": null,
+          "u": "<ACCOUNT>",
+          "ut": 1780919672102
+        }
+      ]
+    },
+    {
+      "channel": "account_positions",
+      "data": [
+        {
+          "a": "0.0002",
+          "d": "bid",
+          "f": "0",
+          "i": false,
+          "l": null,
+          "m": "0",
+          "p": "63441",
+          "s": "BTC",
+          "t": 1780919672151
+        }
+      ],
+      "li": 336542010
+    },
+    {
+      "channel": "account_order_updates",
+      "data": [
+        {
+          "I": "660964d8-fe89-45cf-a3c4-53876246098d",
+          "a": "0.0002",
+          "ct": 1780919680798,
+          "d": "ask",
+          "f": "0",
+          "i": 336542133,
+          "ip": "63401",
+          "li": 336542133,
+          "lp": "0",
+          "oe": "make",
+          "os": "open",
+          "ot": "market",
+          "p": "0",
+          "r": true,
+          "s": "BTC",
+          "si": null,
+          "sp": null,
+          "tp": null,
+          "u": "<ACCOUNT>",
+          "ut": 1780919680798
+        },
+        {
+          "I": "660964d8-fe89-45cf-a3c4-53876246098d",
+          "a": "0.0002",
+          "ct": 1780919680798,
+          "d": "ask",
+          "f": "0.0002",
+          "i": 336542133,
+          "ip": "63401",
+          "li": 336542133,
+          "lp": "63433",
+          "oe": "fulfill_market",
+          "os": "filled",
+          "ot": "market",
+          "p": "63433",
+          "r": true,
+          "s": "BTC",
+          "si": null,
+          "sp": null,
+          "tp": null,
+          "u": "<ACCOUNT>",
+          "ut": 1780919680798
+        }
+      ]
+    },
+    {
+      "channel": "account_trades",
+      "data": [
+        {
+          "I": "660964d8-fe89-45cf-a3c4-53876246098d",
+          "a": "0.0002",
+          "f": "0.005075",
+          "h": 68790436,
+          "i": 336542133,
+          "it": 0,
+          "li": 336542133,
+          "n": "-0.006675",
+          "o": "63441",
+          "p": "63433",
+          "s": "BTC",
+          "t": 1780919680798,
+          "tc": "normal",
+          "te": "fulfill_taker",
+          "ts": "close_long",
+          "u": "<ACCOUNT>"
+        }
+      ]
+    },
+    {
+      "channel": "account_positions",
+      "data": [],
+      "li": 336542133
+    }
+  ],
+  "open_response": {
+    "code": null,
+    "data": {
+      "order_id": 336542009
+    },
+    "error": null,
+    "success": true
+  },
+  "subscriptions": [
+    {
+      "method": "subscribe",
+      "params": {
+        "account": "<ACCOUNT>",
+        "source": "account_positions"
+      }
+    },
+    {
+      "method": "subscribe",
+      "params": {
+        "account": "<ACCOUNT>",
+        "source": "account_order_updates"
+      }
+    },
+    {
+      "method": "subscribe",
+      "params": {
+        "account": "<ACCOUNT>",
+        "source": "account_trades"
+      }
+    }
+  ],
+  "success": {
+    "channel_counts": {
+      "account_order_updates": 2,
+      "account_positions": 2,
+      "account_trades": 2,
+      "subscribe": 1
+    },
+    "flat_after_close": true,
+    "has_account_positions": true,
+    "has_account_trades": true,
+    "has_non_empty_rest_position_after_open": true,
+    "rest_positions_after_close_count": 0,
+    "rest_positions_after_open_count": 1
+  }
+}

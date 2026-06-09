@@ -1,0 +1,12 @@
+{
+  "path": "/api/v1/positions",
+  "payload": {
+    "code": null,
+    "data": [],
+    "error": null,
+    "success": true
+  },
+  "query": {
+    "account": "<ACCOUNT>"
+  }
+}

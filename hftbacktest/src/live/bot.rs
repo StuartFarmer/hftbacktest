@@ -12,26 +12,9 @@ use crate::{
     depth::{L2MarketDepth, MarketDepth},
     live::{Instrument, ipc::Channel},
     types::{
-        Bot,
-        BuildError,
-        ElapseResult,
-        Event,
-        LOCAL_ASK_DEPTH_EVENT,
-        LOCAL_BID_DEPTH_EVENT,
-        LOCAL_BUY_TRADE_EVENT,
-        LOCAL_SELL_TRADE_EVENT,
-        LiveError,
-        LiveEvent,
-        LiveRequest,
-        OrdType,
-        Order,
-        OrderId,
-        OrderRequest,
-        Side,
-        StateValues,
-        Status,
-        TimeInForce,
-        WaitOrderResponse,
+        Bot, BuildError, ElapseResult, Event, LOCAL_ASK_DEPTH_EVENT, LOCAL_BID_DEPTH_EVENT,
+        LOCAL_BUY_TRADE_EVENT, LOCAL_SELL_TRADE_EVENT, LiveError, LiveEvent, LiveRequest, OrdType,
+        Order, OrderId, OrderRequest, Side, StateValues, Status, TimeInForce, WaitOrderResponse,
     },
 };
 
@@ -552,7 +535,38 @@ where
         qty: f64,
         wait: bool,
     ) -> Result<ElapseResult, Self::Error> {
-        todo!();
+        let instrument = self
+            .instruments
+            .get_mut(asset_no)
+            .ok_or(BotError::InstrumentNotFound)?;
+        let symbol = instrument.symbol.clone();
+        let order = instrument
+            .orders
+            .get_mut(&order_id)
+            .ok_or(BotError::OrderNotFound)?;
+        if !order.cancellable() || qty <= order.exec_qty {
+            return Err(BotError::InvalidOrderStatus);
+        }
+        order.price_tick = (price / order.tick_size).round() as i64;
+        order.qty = qty;
+        order.leaves_qty = (qty - order.exec_qty).max(0.0);
+        order.req = Status::Replaced;
+        order.local_timestamp = Utc::now().timestamp_nanos_opt().unwrap();
+
+        self.channel.send(
+            self.id,
+            asset_no,
+            LiveRequest::Order {
+                symbol,
+                order: order.clone(),
+            },
+        )?;
+
+        if wait {
+            // fixme: timeout should be specified by the argument.
+            return self.wait_order_response(asset_no, order_id, 60_000_000_000);
+        }
+        Ok(ElapseResult::Ok)
     }
 
     #[inline]
@@ -652,5 +666,132 @@ where
 
     fn order_latency(&self, asset_no: usize) -> Option<(i64, i64, i64)> {
         self.instruments.get(asset_no).unwrap().last_order_latency
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use std::time::Duration;
+
+    use super::*;
+    use crate::{
+        depth::HashMapMarketDepth,
+        live::{Instrument, ipc::Channel},
+    };
+
+    #[derive(Default)]
+    struct FakeChannel {
+        sent: Vec<(u64, usize, LiveRequest)>,
+    }
+
+    impl Channel for FakeChannel {
+        fn build<MD>(_instruments: &[Instrument<MD>]) -> Result<Self, BuildError>
+        where
+            Self: Sized,
+        {
+            Ok(Self::default())
+        }
+
+        fn recv_timeout(
+            &mut self,
+            _id: u64,
+            _timeout: Duration,
+        ) -> Result<(usize, LiveEvent), BotError> {
+            Err(BotError::Timeout)
+        }
+
+        fn send(&mut self, id: u64, inst_no: usize, request: LiveRequest) -> Result<(), BotError> {
+            self.sent.push((id, inst_no, request));
+            Ok(())
+        }
+    }
+
+    fn test_bot() -> LiveBot<FakeChannel, HashMapMarketDepth> {
+        LiveBot {
+            id: 7,
+            channel: FakeChannel::default(),
+            instruments: vec![Instrument::new(
+                "connector",
+                "BTC",
+                1.0,
+                0.00001,
+                HashMapMarketDepth::new(1.0, 0.00001),
+                0,
+            )],
+            error_handler: None,
+            order_hook: None,
+        }
+    }
+
+    #[test]
+    fn live_modify_marks_order_replaced_and_sends_request() {
+        let mut bot = test_bot();
+        bot.submit_buy_order(0, 42, 100.0, 0.001, TimeInForce::GTX, OrdType::Limit, false)
+            .unwrap();
+        bot.instruments[0].orders.get_mut(&42).unwrap().req = Status::None;
+
+        let result = bot.modify(0, 42, 101.0, 0.002, false);
+
+        assert_eq!(result.unwrap(), ElapseResult::Ok);
+        let order = bot.orders(0).get(&42).unwrap();
+        assert_eq!(order.order_id, 42);
+        assert_eq!(order.side, Side::Buy);
+        assert_eq!(order.price(), 101.0);
+        assert_eq!(order.qty, 0.002);
+        assert_eq!(order.leaves_qty, 0.002);
+        assert_eq!(order.req, Status::Replaced);
+        assert_eq!(order.status, Status::New);
+
+        match &bot.channel.sent.last().unwrap().2 {
+            LiveRequest::Order { symbol, order } => {
+                assert_eq!(symbol, "BTC");
+                assert_eq!(order.order_id, 42);
+                assert_eq!(order.req, Status::Replaced);
+                assert_eq!(order.price(), 101.0);
+                assert_eq!(order.qty, 0.002);
+            }
+            _ => panic!("expected order request"),
+        }
+    }
+
+    #[test]
+    fn live_modify_preserves_exec_qty_and_recomputes_leaves_qty() {
+        let mut bot = test_bot();
+        bot.submit_sell_order(0, 43, 100.0, 0.003, TimeInForce::GTX, OrdType::Limit, false)
+            .unwrap();
+        {
+            let order = bot.instruments[0].orders.get_mut(&43).unwrap();
+            order.status = Status::PartiallyFilled;
+            order.exec_qty = 0.001;
+            order.leaves_qty = 0.002;
+            order.req = Status::None;
+        }
+
+        bot.modify(0, 43, 102.0, 0.0035, false).unwrap();
+
+        let order = bot.orders(0).get(&43).unwrap();
+        assert_eq!(order.exec_qty, 0.001);
+        assert_eq!(order.qty, 0.0035);
+        assert_eq!(order.leaves_qty, 0.0025);
+        assert_eq!(order.req, Status::Replaced);
+    }
+
+    #[test]
+    fn live_modify_rejects_missing_or_pending_orders() {
+        let mut bot = test_bot();
+
+        assert!(matches!(
+            bot.modify(0, 99, 101.0, 0.001, false),
+            Err(BotError::OrderNotFound)
+        ));
+
+        bot.submit_buy_order(0, 44, 100.0, 0.001, TimeInForce::GTX, OrdType::Limit, false)
+            .unwrap();
+        bot.instruments[0].orders.get_mut(&44).unwrap().req = Status::New;
+
+        assert!(matches!(
+            bot.modify(0, 44, 101.0, 0.001, false),
+            Err(BotError::InvalidOrderStatus)
+        ));
     }
 }

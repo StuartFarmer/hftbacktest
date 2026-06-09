@@ -1,0 +1,42 @@
+{
+  "path": "/api/v1/account",
+  "payload": {
+    "code": null,
+    "data": {
+      "account_equity": "674.334224",
+      "available_to_spend": "541.058832",
+      "available_to_withdraw": "541.058832",
+      "balance": "7.957268",
+      "cross_account_equity": "541.058832",
+      "cross_mmr": "0",
+      "fee_level": 0,
+      "maker_fee": "0.00015",
+      "orders_count": 0,
+      "pending_balance": "0",
+      "pending_interest": "0",
+      "positions_count": 0,
+      "spot_balances": [
+        {
+          "amount": "9.99",
+          "available_to_withdraw": "9.99",
+          "daily_withdraw_amount_usd": "0",
+          "effective_daily_deposit_limit_usd": "50000",
+          "effective_daily_withdraw_limit_usd": "250000",
+          "pending_balance": "0",
+          "symbol": "SOL"
+        }
+      ],
+      "spot_collateral": "533.101565",
+      "spot_market_value": "666.376956",
+      "stop_orders_count": 0,
+      "taker_fee": "0.0004",
+      "total_margin_used": "0",
+      "updated_at": 1780919421270
+    },
+    "error": null,
+    "success": true
+  },
+  "query": {
+    "account": "<ACCOUNT>"
+  }
+}
